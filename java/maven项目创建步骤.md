@@ -1,6 +1,6 @@
 ## 创建项目  
 1. 新建快速maven项目  
->* File->New->Project->Maven->maven-archetype-quickstart->Next
+> File->New->Project->Maven->maven-archetype-quickstart->Next
 2. 命名习惯  
 >* GroupId：倒着的域名，如：com.miaoshaproject  
 >* ArtifactId:项目名，如miaosha  
@@ -13,5 +13,5 @@
 ## 集成Springboot项目  
 1. 登录官网，在Build a RESTful Web Service中点击Build with Maven
 >* 拷贝<parent>标签内容到pom.xml的<properties>标签前  
- * 拷贝<dependencies>中第一个<dependency>内容到pom文件第一个<dependency>前  
+>* 拷贝<dependencies>中第一个<dependency>内容到pom文件第一个<dependency>前  
 2. 在右侧刷新重新导入Maven
