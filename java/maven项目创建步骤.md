@@ -63,3 +63,12 @@
   >* 使用@Autowired注解将UserPasswordDOMapper引入进来  
 14. 因为默认只为UserPasswordDOMapper提供了通过主键查找用户密码的方法，但实际需要通过UserId查找用户密码，所以改造一下  
   >* 在UserPasswordDOMapper.xml中模仿selectByPrimaryKey写一个selectByUserID方法  
+  >* 在UserPasswordDOMapper文件中定义selectByUserId(Integer userId)方法  
+  >* 在UserServiceImpl文件的getUserById方法中使用UserPasswordDOMapper调用selectByUserId(userDO.getId()),获取到用户密码。（先通过userDOMapper调用selectByPrimaryKey方法获取到用户对象，然后获取对象的id后在密码表通过用户id而不是主键来获取用户密码）最后调用convertFromDataObject函数将userDO和UserPasswordDO组装成一个UserModel对象返回  
+15. 在UserController中通过UserServiceImpl调用getUserById(id)写好getUser方法，返回一个UserModel,实现调用service服务获取对应id的对象并返回给前端。此时启动，修改路径为localhost:8090/user/get?id=1，此时访问即可输出json串。但是此时，用户密码也直接暴露在了前端，这是因为将自己业务逻辑的领域模型直接全部返回给了前端，前端应该只需要它要展示的属性数据即可，而不是领域模型全部。所以要在controller层再加一层模型对象  
+16. 添加模型对象：  
+  >* 在controller文件下新建package：viewobject，在其中新建class：UserVO，添加和UserModel一样的字段，删除掉前端不需要展示的字段如password，再生成getter和setter方法  
+  >* 将UserController文件的getUser函数的返回值改为UserVO  
+  >* 新加一个convertFromModel（UserModle UserModel）方法，将UserModel中的信息以UserVO的形式返回出去  
+  >* 将getUser的return值改为convertFromModel（UserModle),实现将核心领域模型对象转化为可供前端使用的viewobject，此时再次启动之后，浏览器显示的字段就没有password了  
+  
