@@ -25,28 +25,28 @@
   >* 在resources文件下创建新的Directory为mapping  
   >* 在pom文件中的<plugins>标签最后加上org.mybatis.generator的插件，在此<plugin>标签内加上<dependencies>标签，引入mybatis、mysql依赖，在<dependencies>标签后加上<executions>标签，其中添加<execution>标签，定义id（名字）、phase（package）、goals，在<goals>标签内定义<goal>为generate，最后可以在<executions>标签后用<configaration>进行一些配置，如<verbose>(是否允许移动生成文件）、<overwrite>（是否允许覆盖），最后在<configurationFile>中添加mybatis-generator的配置文件路径（一般在resources文件下），在此路径新建mybatis-generator.xml文件（可下载）。  
 4. 创建数据库，使用Navicat for MySQL创建数据表  
-5. 配置mybatis-generator.xml文件：  
-  >* 在mybatis-generator.xml的<jdbcConnection>中填写数据库的connectionURL="jdbc:mysql://127.0.0.1:3306/数据库名"，以及数据库的userId、password值   
-  >* 在com.miaoshaproject目录下新建dataobject的package，将mybatis-generator.xml的<javaModelGenerator>中的targetPackage指定为com.miaoshaproject.dataobject，实现将数据库中的表分别建立dataobject到此路径下  
-  >* 在<sqlMapGenerator>标签内，将属性targetPackage改为mapping，targetProject为“src/main/resources”  
-  >* 在com.miaoshaproject目录下新建dao的package，<javaClientGenerator>的targetProject为com.miaoshaproject.dao  
-  >* 在<sqlMapGenerator>标签后添加<table>标签，填写表名和映射文件名
+5. 配置mybatis-generator.xml文件：    
+>* 在mybatis-generator.xml的<jdbcConnection>中填写数据库的connectionURL="jdbc:mysql://127.0.0.1:3306/数据库名"，以及数据库的userId、password值     
+>* 在com.miaoshaproject目录下新建dataobject的package，将mybatis-generator.xml的<javaModelGenerator>中的targetPackage指定为com.miaoshaproject.dataobject，实现将数据库中的表分别建立dataobject到此路径下    
+>*  在<sqlMapGenerator>标签内，将属性targetPackage改为mapping，targetProject为“src/main/resources”    
+>* 在com.miaoshaproject目录下新建dao的package，<javaClientGenerator>的targetProject为com.miaoshaproject.dao    
+>* 在<sqlMapGenerator>标签后添加<table>标签，填写表名和映射文件名    
 6. 在run->edit Configurations->"+"新建->maven  
-  >* Name:mybatis-generator  
-  >* Command line:mybatis-generator:generate  
+>* Name:mybatis-generator  
+>*  Command line:mybatis-generator:generate  
 7. Run->Run "mybatis-generator",在mapping自动生成数据库的表的对应文件，在dataobject中生成表中的对应字段、方法  
 8. 在application.properties文件中配置：  
-  >* spring.datasources.name=miaosha  （数据库信息）
-  >* spring.datasource.url=jdbc:mysql://127.0.0.1:3306/miaosha  
-  >* spring.datasource.username=root  
-  >* spring.datasource.password=root  
-  >* spring.datasource.type=com.alibaba.druid.pool.DruidDataSource（使用Druid数据源）
-  >* spring.datasource.driverClassName=com.mysql.jdbc.Driver  
+>* spring.datasources.name=miaosha  （数据库信息）
+>* spring.datasource.url=jdbc:mysql://127.0.0.1:3306/miaosha  
+>* spring.datasource.username=root  
+>* spring.datasource.password=root  
+>* spring.datasource.type=com.alibaba.druid.pool.DruidDataSource（使用Druid数据源）
+>* spring.datasource.driverClassName=com.mysql.jdbc.Driver  
  9. 修改APP文件：  
   >* 将@EnableAutoConfiguration改为@SpringbootApplication(scanBasePackages={"com.miaoshaproject"}),扫描此文件  
   >* 在@RestController下添加@MapperScan("com.miaoshaoproject.dao") 
  10. 在com.miaoshapoproject文件下创建新的package：controller、service  
- 11.写用户controller：  
+ 11. 写用户controller：  
   >* 在controller文件夹下创建新class：UserController，在UserController类前面添加@Controller("user"),用来被Spring扫描到，Controller名字叫user，下一行添加@RequestMapping("/user"),指定访问路径  
   >* 在UserController类中新建一个getUser(@RequestParam（name="id"）Integer id)方法,用来调用service服务获取对应id的用户对象并返回给前端，在这个方法前添加@RequestMapping("/get")，指定访问路径  
  12. 写用户service：  
