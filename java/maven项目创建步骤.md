@@ -71,4 +71,14 @@
   >* 将UserController文件的getUser函数的返回值改为UserVO  
   >* 新加一个convertFromModel（UserModle UserModel）方法，将UserModel中的信息以UserVO的形式返回出去  
   >* 将getUser的return值改为convertFromModel（UserModle),实现将核心领域模型对象转化为可供前端使用的viewobject，此时再次启动之后，浏览器显示的字段就没有password了  
+17. 定义通用的返回对象--返回正确信息  
+  >* 在com.miaoshaproject下新建package：response，在其中新建class：CommonReturnType，这个类包括一个String类型的status（表明对应请求的返回处理结果success或fail）和一个Object类型的data（若status为success则data返回前端需要的json数据，若status为fail，则data内使用通用的错误码格式）属性，生成他们的get和set方法    
+  >* 定义一个通用的创建方法create（Object result），处理如果不带任何status的话则将status置为success，创建新的CommonReturnType并返回，再使用函数重载的方法定义create（Object result，String status），处理带status的情况。  
+  >* 将UserController中的getUser函数的返回值改为CommonReturnType，通过convertFromModel方法获得一个UserVO对象，并且通过CommonReturnType调用create方法返回通用对象。此时前端的输出是一个通用对象，包括status和data  
+18.定义通用的返回对象--返回正确信息   
+  >* 在com.miaoshaproject中新建package：error，在其中新建Interface：CommonError，其中定义方法getErrCode()、getErrMsg()、setErrMsg()，再在error中新建Enum：EmBusinessError，去用implements关键字实现CommonError，选中EmBusinessError右键->Implement methods,选中所有方法自动生成基本结构，定义errCode和errMsg。  
+  >* 定义错误码USER_NOT_EXIST(10001,"用户不存在")，使用10000开头为用户信息相关错误定义，写一个EmBussinessError的构造函数，传入errCode和errMsg，修改getErrCode函数和getErrorMsg、setErrMsg函数返回值  
+  >* 定义通用错误类型00001，PARAMETER_VALIDATION_ERROR(00001,"参数不合法") 
+  >* 在error文件下新建class：BusinessException，继承（extend）自Exception类并实现（implements）了CommonError方法，选中BusinessException右键->Implement methods,选中所有方法自动生成基本结构，声明commonError，定义构造函数BusinessException，用来直接接收EmBusinessException的传参用于构造业务异常  
+  >* 实现函数重写BusinessException(CommonError commonError,String errMsg)，实现接收自定义errMsg的方式构造业务异常。改写其他函数返回值
   
